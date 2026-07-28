@@ -1,2 +1,2 @@
 CompileFlags:
-  Add: [-std=c++26, -I/../include]
+  Add: [-std=c++26, -I../include/]
