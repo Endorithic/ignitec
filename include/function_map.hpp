@@ -33,7 +33,7 @@ private:
 
 public:
     /// Creates a new empty function map.
-    /// Note: Only one function map can be created per program. This is enforced
+    /// Note: Only one function map can be created per template instantiation. This is enforced
     /// using a singleton pattern.
     static FunctionMap& create() {
         static FunctionMap map;
@@ -44,7 +44,7 @@ public:
     /// describing how the function execution failed.
     [[nodiscard]] std::expected<Ret, ExecuteError> execute(const std::string& name, Args... args) {
         if (this->functions.contains(name)) {
-            Ret result = (*this->functions[name])(std::forward<Args>(args)...);
+            Ret result = (*this->functions[name])(args...);
             return result;
         }
 
