@@ -44,9 +44,9 @@ public:
     /// describing how the function execution failed.
     template <typename... Callargs>
     [[nodiscard]] std::expected<Ret, ExecuteError> execute(const std::string& name, Callargs&&... args) {
-        if (this->functions.contains(name)) {
-            Ret result = (*this->functions[name])(std::forward<Callargs>(args)...);
-            return result;
+        auto it = this->functions.find(name);
+        if (it != this->functions.end()) {
+            return it->second(std::forward<Callargs>(args)...);
         }
 
         return std::unexpected(ExecuteError::FunctionNotFound);
