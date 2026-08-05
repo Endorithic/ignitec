@@ -42,9 +42,10 @@ public:
 
     /// Executes the function. Returns an expected type containing a possible error
     /// describing how the function execution failed.
-    [[nodiscard]] std::expected<Ret, ExecuteError> execute(const std::string& name, Args... args) {
+    template <typename... Callargs>
+    [[nodiscard]] std::expected<Ret, ExecuteError> execute(const std::string& name, Callargs&&... args) {
         if (this->functions.contains(name)) {
-            Ret result = (*this->functions[name])(args...);
+            Ret result = (*this->functions[name])(std::forward<Callargs>(args)...);
             return result;
         }
 
