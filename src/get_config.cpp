@@ -2,6 +2,7 @@
 
 #include "get_config.hpp"
 
+constexpr std::string AUTHOR_NAME = "Endorithic"; // Windows convention is `Appdata\Roaming\AUTHOR_NAME\PROJECT_NAME`
 constexpr std::string PROJECT_NAME = "ignitec";
 
 #ifdef __linux__
@@ -18,6 +19,27 @@ std::optional<std::filesystem::path> Endo::get_config() {
     }
 
     return std::nullopt;
+}
+
+#endif
+
+#ifdef _WIN32
+
+#include <windows.h>
+#include <ShlObj.h>
+#include <combaseapi.h>
+
+std::optional<std::filesystem::path> Endo::get_config() {
+    PWSTR path = nullptr;
+
+    HRESULT hr = SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, nullptr, &path);
+    if (SUCCEEDED(hr)) {
+        std::filesystem::path final_path{ path };
+        CoTaskMemFree(path);
+        return final_path / AUTHOR_NAME / PROJECT_NAME;
+    } else {
+        return std::nullopt;
+    }
 }
 
 #endif
