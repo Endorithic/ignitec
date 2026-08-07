@@ -15,8 +15,13 @@ namespace Endo {
 class Logger {
 private:
     static constexpr std::string_view ERROR = "\x1b[31m[ERROR]\x1b[0m";
+    static constexpr std::string_view ERROR_RAW = "[ERROR]";
+
     static constexpr std::string_view WARN = "\x1b[33m[ WARN]\x1b[0m";
+    static constexpr std::string_view WARN_RAW = "[ WARN]";
+
     static constexpr std::string_view INFO = "\x1b[32m[ INFO]\x1b[0m";
+    static constexpr std::string_view INFO_RAW = "[ INFO]";
 
     std::optional<std::ofstream> log_file;
 
@@ -39,7 +44,7 @@ public:
         const std::string msg = std::format(fmt, std::forward<Args>(args)...);
         std::println("{}: {}", Logger::INFO, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::INFO, msg);
+            std::println(*log_file, "{}: {}", Logger::INFO_RAW, msg);
         }
     }
 
@@ -49,7 +54,7 @@ public:
         const std::string msg = std::format(fmt, std::forward<Args>(args)...);
         std::println("{}: {}", Logger::WARN, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::WARN, msg);
+            std::println(*log_file, "{}: {}", Logger::WARN_RAW, msg);
         }
     }
 
@@ -59,7 +64,7 @@ public:
         const std::string msg = std::format(fmt, std::forward<Args>(args)...);
         std::println("{}: {}", Logger::ERROR, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::ERROR, msg);
+            std::println(*log_file, "{}: {}", Logger::ERROR_RAW, msg);
         }
     }
 };
