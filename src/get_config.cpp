@@ -4,6 +4,8 @@
 
 constexpr std::string PROJECT_NAME = "ignitec";
 
+#ifdef __linux__
+
 std::optional<std::filesystem::path> Endo::get_config() {
     const char* xdg_config = std::getenv("XDG_CONFIG_HOME");
     if (xdg_config != nullptr && *xdg_config != '\0') {
@@ -17,3 +19,5 @@ std::optional<std::filesystem::path> Endo::get_config() {
 
     return std::nullopt;
 }
+
+#endif
