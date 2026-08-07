@@ -21,7 +21,7 @@ std::optional<std::filesystem::path> Endo::get_config() {
     return std::nullopt;
 }
 
-#endif
+#endif // __linux__
 
 #ifdef _WIN32
 
@@ -42,4 +42,4 @@ std::optional<std::filesystem::path> Endo::get_config() {
     }
 }
 
-#endif
+#endif // _WIN32
