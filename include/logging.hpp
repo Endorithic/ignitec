@@ -36,27 +36,30 @@ public:
     /// Logs an info message to stdout, and the log file if one is provided to the logger.
     template <typename... Args>
     void info(std::format_string<Args...> fmt, Args&&... args) {
-        std::println("{}: {}", Logger::INFO, std::format(fmt, std::forward<Args>(args)...));
+        const std::string msg = std::format(fmt, std::forward<Args>(args)...);
+        std::println("{}: {}", Logger::INFO, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::INFO, std::format(fmt, std::forward<Args>(args)...));
+            std::println(*log_file, "{}: {}", Logger::INFO, msg);
         }
     }
 
     /// Logs a warning to stdout, and the log file if one is provided to the logger.
     template <typename... Args>
     void warn(std::format_string<Args...> fmt, Args&&... args) {
-        std::println("{}: {}", Logger::WARN, std::format(fmt, std::forward<Args>(args)...));
+        const std::string msg = std::format(fmt, std::forward<Args>(args)...);
+        std::println("{}: {}", Logger::WARN, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::WARN, std::format(fmt, std::forward<Args>(args)...));
+            std::println(*log_file, "{}: {}", Logger::WARN, msg);
         }
     }
 
     /// Logs an error message to stderr, and the log file if one is provided to the logger.
     template <typename... Args>
     void error(std::format_string<Args...> fmt, Args&&... args) {
-        std::println(std::cerr, "{}: {}", Logger::ERROR, std::format(fmt, std::forward<Args>(args)...));
+        const std::string msg = std::format(fmt, std::forward<Args>(args)...);
+        std::println("{}: {}", Logger::ERROR, msg);
         if (this->log_file) {
-            std::println(*log_file, "{}: {}", Logger::ERROR, std::format(fmt, std::forward<Args>(args)...));
+            std::println(*log_file, "{}: {}", Logger::ERROR, msg);
         }
     }
 };
