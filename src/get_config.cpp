@@ -1,11 +1,11 @@
-#include <cstdlib>
-
 #include "get_config.hpp"
 
 constexpr std::string AUTHOR_NAME = "Endorithic"; // Windows convention is `Appdata\Roaming\AUTHOR_NAME\PROJECT_NAME`
 constexpr std::string PROJECT_NAME = "ignitec";
 
 #ifdef __linux__
+
+#include <cstdlib>
 
 std::optional<std::filesystem::path> Endo::get_config() {
     const char* xdg_config = std::getenv("XDG_CONFIG_HOME");
