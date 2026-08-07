@@ -61,6 +61,6 @@ public:
     }
 };
 
-}
+} // namespace Endo
 
-#endif
+#endif // ENDO_LOGGING_HPP
