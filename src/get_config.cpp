@@ -1,7 +1,7 @@
 #include "get_config.hpp"
 
-constexpr std::string AUTHOR_NAME = "Endorithic"; // Windows convention is `Appdata\Roaming\AUTHOR_NAME\PROJECT_NAME`
-constexpr std::string PROJECT_NAME = "ignitec";
+constexpr std::string_view AUTHOR_NAME = "Endorithic"; // Windows convention is `Appdata\Roaming\AUTHOR_NAME\PROJECT_NAME`
+constexpr std::string_view PROJECT_NAME = "ignitec";
 
 #ifdef __linux__
 
