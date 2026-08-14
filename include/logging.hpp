@@ -2,7 +2,6 @@
 #define ENDO_LOGGING_HPP
 
 #include <fstream>
-#include <iostream>
 #include <optional>
 #include <format>
 #include <print>
