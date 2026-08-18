@@ -61,7 +61,7 @@ public:
     template <typename... Args>
     void error(std::format_string<Args...> fmt, Args&&... args) {
         const std::string msg = std::format(fmt, std::forward<Args>(args)...);
-        std::println("{}: {}", Logger::ERROR, msg);
+        std::println(stderr, "{}: {}", Logger::ERROR, msg);
         if (this->log_file) {
             std::println(*log_file, "{}: {}", Logger::ERROR_RAW, msg);
         }
