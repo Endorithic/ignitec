@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     ignitec
-    VERSION 0.0.0
+    VERSION 0.1.0
     LANGUAGES CXX
 )
 
@@ -10,6 +10,7 @@ add_executable( ignitec
     src/main.cpp
     src/get_config.cpp
     src/logging.cpp
+    src/init.cpp
 )
 
 set_target_properties( ignitec PROPERTIES
