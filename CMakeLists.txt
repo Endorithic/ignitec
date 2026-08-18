@@ -20,11 +20,6 @@ set_target_properties( ignitec PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/target
 )
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(ignitec PRIVATE -stdlib=libc++)
-    target_link_options(ignitec PRIVATE -stdlib=libc++)
-endif()
-
 target_include_directories( ignitec PRIVATE
     include/
 )
