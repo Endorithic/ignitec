@@ -23,7 +23,7 @@ std::optional<std::filesystem::path> Endo::get_config() {
 
 #endif // __linux__
 
-#ifdef _WIN32
+#ifdef _WIN32 // I no longer have a windows machine, so windows API stuff is going to be minimal going forwards
 
 #include <windows.h>
 #include <ShlObj.h>
