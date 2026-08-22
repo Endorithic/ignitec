@@ -45,5 +45,7 @@ int Endo::init(Logger& logger, const std::optional<std::string>& project_name) {
         return 1;
     }
 
+    main_cpp << "#include <print>\n\nint main() {\n    std::println(\"Hello world!\");\n}\n";
+
     return 0;
 }
