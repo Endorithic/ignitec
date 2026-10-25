@@ -89,7 +89,7 @@ fn compile_into(
             .arg("-Iinclude/")
             .arg("-c")
             .arg(entry.path())
-            .arg("-std=c++26")
+            .arg("-std=c++23")
             .arg("-o")
             .arg(&output)
             .status()
