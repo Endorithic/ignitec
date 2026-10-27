@@ -10,7 +10,7 @@ use clap::Parser;
 
 use cli::Cli;
 use cli::Commands;
-use config::logfiles;
+use core::logfiles;
 use logger::Logger;
 use subcommands::build;
 use subcommands::init;
