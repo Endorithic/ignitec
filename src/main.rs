@@ -1,6 +1,6 @@
 mod clap_styles;
 mod cli;
-mod config;
+mod core;
 mod logger;
 mod subcommands;
 
