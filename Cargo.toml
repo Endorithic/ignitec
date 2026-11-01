@@ -13,3 +13,12 @@ owo-colors = "4.3.0"
 
 [lints.clippy]
 redundant_field_names = "allow"
+
+[profile.performance]
+inherits = "release"
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+lto = "fat"
+debug = false
+strip = true
