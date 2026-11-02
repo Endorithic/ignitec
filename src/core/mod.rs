@@ -1,3 +1,4 @@
+pub mod directories;
 pub mod logfiles;
 
 /// Define data about the project, useful for constructing the correct project path

@@ -7,19 +7,13 @@ use std::process;
 use anyhow::Context;
 use clap::Args;
 
+use crate::core::directories::ProjectStructure;
 use crate::info;
 use crate::logger::Logger;
 use crate::warn;
 
 #[derive(Args)]
 pub struct BuildArgs {}
-
-/// Get the object directory associated with the selected build profile
-fn object_directory(project_dir: &path::Path, profile: &str) -> path::PathBuf {
-    let target_dir: path::PathBuf = project_dir.join("target");
-    let target_profile_dir: path::PathBuf = target_dir.join(profile);
-    target_profile_dir.join("objects")
-}
 
 /// Delete all the stale object files
 fn delete_objects(object_dir: &path::Path) -> anyhow::Result<()> {
@@ -50,6 +44,7 @@ fn delete_objects(object_dir: &path::Path) -> anyhow::Result<()> {
 fn compile_into(
     logger: &mut Logger,
     source_dir: &path::Path,
+    include_dir: &path::Path,
     object_dir: &path::Path,
 ) -> anyhow::Result<()> {
     fs::create_dir_all(object_dir).context("Could not create object directory")?;
@@ -63,7 +58,12 @@ fn compile_into(
 
         let entry_path: path::PathBuf = entry.path();
         if entry_path.is_dir() {
-            compile_into(logger, &entry_path, &object_dir.join(entry.file_name()))?;
+            compile_into(
+                logger,
+                &entry_path,
+                include_dir,
+                &object_dir.join(entry.file_name()),
+            )?;
             continue;
         }
 
@@ -86,7 +86,7 @@ fn compile_into(
 
         info!(logger, "Compiling file: {:?}", entry_path);
         let status: process::ExitStatus = process::Command::new("clang++")
-            .arg("-Iinclude/")
+            .arg(format!("-I{}", include_dir.to_str().unwrap_or("include/")))
             .arg("-c")
             .arg(entry.path())
             .arg("-std=c++23")
@@ -143,19 +143,14 @@ fn link_objects(
     logger: &mut Logger,
     object_dir: &path::Path,
     destination: &path::Path,
+    application_name: &ffi::OsStr,
 ) -> anyhow::Result<()> {
     let mut command: process::Command = process::Command::new("clang++");
 
     link_dir(logger, object_dir, &mut command)?;
 
-    let profile_output_path: path::PathBuf = destination.join("debug");
-    let cwd: path::PathBuf =
-        env::current_dir().context("Failed to get current working directory.")?;
-    let project_name: &ffi::OsStr = cwd.file_name().unwrap_or(ffi::OsStr::new("app"));
-    let output_path: path::PathBuf = profile_output_path.join(project_name);
-
     command.arg("-o");
-    command.arg(output_path);
+    command.arg(destination.join(application_name));
 
     let status: process::ExitStatus = command
         .status()
@@ -172,18 +167,30 @@ fn link_objects(
 pub fn build(logger: &mut Logger, _args: &BuildArgs) -> anyhow::Result<()> {
     let project_dir: path::PathBuf =
         env::current_dir().context("Failed to get project directory")?;
+    let project_structure: ProjectStructure = ProjectStructure::from_root(project_dir)?;
 
-    let source_dir: path::PathBuf = project_dir.join("src");
-    if !source_dir.is_dir() {
-        anyhow::bail!("Cannot find source directory");
-    }
+    let profiled_object_dir: path::PathBuf = project_structure.get_profiled_object("debug");
+    let profiled_target_dir: path::PathBuf = project_structure.get_profiled_target("debug");
 
-    let object_dir: path::PathBuf = object_directory(&project_dir, "debug");
-    delete_objects(&object_dir)?;
-    compile_into(logger, &source_dir, &object_dir)?;
+    delete_objects(&profiled_object_dir)?;
+    compile_into(
+        logger,
+        &project_structure.source_directory,
+        &project_structure.include_directory,
+        &profiled_object_dir,
+    )?;
 
-    let target_dir: path::PathBuf = project_dir.join("target");
-    link_objects(logger, &object_dir, &target_dir)?;
+    let application_name: &ffi::OsStr = project_structure
+        .project_root
+        .file_name()
+        .unwrap_or(ffi::OsStr::new("app"));
+
+    link_objects(
+        logger,
+        &profiled_object_dir,
+        &profiled_target_dir,
+        application_name,
+    )?;
 
     Ok(())
 }
