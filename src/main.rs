@@ -1,6 +1,6 @@
 mod clap_styles;
 mod cli;
-mod core;
+mod common;
 mod logger;
 mod subcommands;
 
@@ -10,7 +10,7 @@ use clap::Parser;
 
 use cli::Cli;
 use cli::Commands;
-use core::logfiles;
+use common::logfiles;
 use logger::Logger;
 use subcommands::build;
 use subcommands::init;

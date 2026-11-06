@@ -7,7 +7,7 @@ use std::process;
 use anyhow::Context;
 use clap::Args;
 
-use crate::core::directories::ProjectStructure;
+use crate::common::directories::ProjectStructure;
 use crate::info;
 use crate::logger::Logger;
 use crate::warn;
